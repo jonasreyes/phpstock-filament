@@ -1,5 +1,5 @@
 <img
-    src="{{ asset('images/mincyt_logo.png') }}"
-    alt="Logo Mincyt"
+    src="{{ asset('images/LOGO-PRO.png') }}"
+    alt="Logo OmCode"
     class="h-16"
 />

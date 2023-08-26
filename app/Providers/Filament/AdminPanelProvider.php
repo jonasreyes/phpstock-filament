@@ -29,7 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 // 'primary' => Color::Teal,
-                'primary' => '#1D70B7', # Color oficial Mincyt
+                // 'primary' => '#1D70B7', # Color oficial Mincyt
+                'primary' => Color::Red,
             ])
             ->font('Raleway')
             ->favicon('images/favicon_mincyt_Nb.png')
