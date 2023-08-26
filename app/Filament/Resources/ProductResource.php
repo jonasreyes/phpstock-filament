@@ -21,9 +21,12 @@ use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
@@ -44,21 +47,47 @@ class ProductResource extends Resource
                 ->schema([
                     Section::make()
                     ->schema([
-                        TextInput::make('name'),
-                        TextInput::make('slug'),
+                        TextInput::make('name')
+                        ->required()
+                        ->live(onBlur: true)
+                        ->unique()
+                        ->afterStateUpdated(function(string $operation, $state, Forms\Set $set){
+                            if($operation !== 'create'){
+                                return;
+                            }
+                            $set('slug', Str::slug($state));
+
+                        }),
+
+                        TextInput::make('slug')
+                        ->disabled()
+                        ->dehydrated()
+                        ->required()
+                        ->unique(Product::class, 'slug', ignoreRecord: true),
                         MarkdownEditor::make('description')->columnSpan('full'),
                     ])->columns(2),
 
                     Section::make('Precio & Inventario')
                     ->schema([
-                        TextInput::make('sku'),
-                        TextInput::make('price'),
-                        TextInput::make('quantity'),
+                        TextInput::make('sku')
+                        ->label("SKU (Unidad de Mantenimiento de Stock)"),
+
+                        TextInput::make('price')
+                        ->numeric()
+                        ->rules('regex:/^\d{1,6}(\.\d{0,2})?$/')
+                        ->required(),
+
+                        TextInput::make('quantity')
+                        ->numeric()
+                        ->minValue(0)
+                        ->maxValue(100)
+                        ->required(),
+
                         Select::make('type')
                         ->options([
                             'downloadable' => ProductTypeEnum::DOWNLOADABLE->value,
                             'deliverable' => ProductTypeEnum::DELIVERABLE->value,
-                        ])
+                        ])->required()
                     ])->columns(2)
                 ]),
 
@@ -66,14 +95,28 @@ class ProductResource extends Resource
                 ->schema([
                     Section::make('Status')
                     ->schema([
-                        Toggle::make('is_visible'),
-                        Toggle::make('is_featured'),
-                        DatePicker::make('published_at')->columnSpan('full')
-                    ])->columns(2),
+                        Toggle::make('is_visible')
+                        ->label('Visibilidad')
+                        ->helperText('Habilita o inhabilita la visibilidad del producto')
+                        ->default(true),
+
+                        Toggle::make('is_featured')
+                        ->label('Característica')
+                        ->helperText('Habilita o inhabilita el estado de productos destacados'),
+
+                        DatePicker::make('published_at')
+                        ->label('Disponibilidad')
+                        ->default(now())
+                        ->columnSpan('full')
+                    ]),
 
                     Section::make('Imagen')
                     ->schema([
                         FileUpload::make('image')
+                        ->directory('form-attachments')
+                        ->preserveFilenames()
+                        ->image()
+                        ->imageEditor()
                     ])->collapsible(),
 
 
@@ -92,16 +135,44 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('image'),
-                TextColumn::make('name'),
-                TextColumn::make('brand.name'),
-                IconColumn::make('is_visible')->boolean(),
-                TextColumn::make('price'),
-                TextColumn::make('quantity'),
-                TextColumn::make('published_at'),
+                TextColumn::make('name')
+                ->searchable()
+                ->sortable(),
+
+                TextColumn::make('brand.name')
+                ->searchable()
+                ->sortable()
+                ->toggleable(),
+
+                IconColumn::make('is_visible')
+                ->sortable()
+                ->toggleable()
+                ->label('Visibilidad')
+                ->boolean(),
+                TextColumn::make('price')
+                ->sortable()
+                ->toggleable(),
+
+                TextColumn::make('quantity')
+                ->sortable()
+                ->toggleable(),
+
+                TextColumn::make('published_at')
+                ->date()
+                ->sortable(),
+
                 TextColumn::make('type'),
             ])
             ->filters([
-                //
+                TernaryFilter::make('is_visible')
+                ->label('Visibilidad')
+                ->boolean()
+                ->trueLabel('Solo Productos Visibles')
+                ->falseLabel('Solo Productos Ocultos')
+                ->native(false),
+
+                SelectFilter::make('brand')
+                ->relationship('brand', 'name')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
