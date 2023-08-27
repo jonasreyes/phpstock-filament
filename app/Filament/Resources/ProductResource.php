@@ -18,6 +18,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -34,7 +36,9 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
 
-    protected static ?string $navigationGroup = 'Shop';
+    protected static ?int $navigationSort = 0;
+
+    protected static ?string $navigationGroup = 'Comercio';
 
     protected static ?string $navigationLabel = 'Productos';
 
@@ -50,7 +54,7 @@ class ProductResource extends Resource
                         TextInput::make('name')
                         ->required()
                         ->live(onBlur: true)
-                        ->unique()
+                        ->unique(ignoreRecord: true) // ignoreRecord evita el error de verificar como unico el campo cuando se está modificando el registro.
                         ->afterStateUpdated(function(string $operation, $state, Forms\Set $set){
                             if($operation !== 'create'){
                                 return;
@@ -70,7 +74,7 @@ class ProductResource extends Resource
                     Section::make('Precio & Inventario')
                     ->schema([
                         TextInput::make('sku')
-                        ->label("SKU (Unidad de Mantenimiento de Stock)"),
+                        ->label("SKU (Unidad Mant. Stock)"),
 
                         TextInput::make('price')
                         ->numeric()
@@ -175,7 +179,11 @@ class ProductResource extends Resource
                 ->relationship('brand', 'name')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
