@@ -43,6 +43,7 @@ class ProductResource extends Resource
     protected static ?string $navigationLabel = 'Productos';
 
 
+
     public static function form(Form $form): Form
     {
         return $form
