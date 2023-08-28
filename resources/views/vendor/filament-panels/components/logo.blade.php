@@ -1,5 +1,5 @@
 <img
-    src="{{ asset('images/LOGO-PRO.png') }}"
+    src="{{ asset('images/logo.png') }}"
     alt="Logo OmCode"
-    class="h-16"
+    class="h-14"
 />

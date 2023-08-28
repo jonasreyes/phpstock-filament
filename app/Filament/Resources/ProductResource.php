@@ -53,6 +53,7 @@ class ProductResource extends Resource
                     Section::make()
                     ->schema([
                         TextInput::make('name')
+                        ->label('Nombre')
                         ->required()
                         ->live(onBlur: true)
                         ->unique(ignoreRecord: true) // ignoreRecord evita el error de verificar como unico el campo cuando se está modificando el registro.
@@ -69,7 +70,9 @@ class ProductResource extends Resource
                         ->dehydrated()
                         ->required()
                         ->unique(Product::class, 'slug', ignoreRecord: true),
-                        MarkdownEditor::make('description')->columnSpan('full'),
+
+                        MarkdownEditor::make('description')->columnSpan('full')
+                        ->label('Descripción'),
                     ])->columns(2),
 
                     Section::make('Precio & Inventario')
@@ -78,17 +81,20 @@ class ProductResource extends Resource
                         ->label("SKU (Unidad Mant. Stock)"),
 
                         TextInput::make('price')
+                        ->label('Precio')
                         ->numeric()
                         ->rules('regex:/^\d{1,6}(\.\d{0,2})?$/')
                         ->required(),
 
                         TextInput::make('quantity')
+                        ->label('Cantidad')
                         ->numeric()
                         ->minValue(0)
                         ->maxValue(100)
                         ->required(),
 
                         Select::make('type')
+                        ->label('Tipo')
                         ->options([
                             'downloadable' => ProductTypeEnum::DOWNLOADABLE->value,
                             'deliverable' => ProductTypeEnum::DELIVERABLE->value,
@@ -139,12 +145,16 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                ->label('Imagen'),
+
                 TextColumn::make('name')
+                ->label('Nombre')
                 ->searchable()
                 ->sortable(),
 
                 TextColumn::make('brand.name')
+                ->label('Marca')
                 ->searchable()
                 ->sortable()
                 ->toggleable(),
@@ -155,18 +165,21 @@ class ProductResource extends Resource
                 ->label('Visibilidad')
                 ->boolean(),
                 TextColumn::make('price')
+                ->label('Precio')
                 ->sortable()
                 ->toggleable(),
 
                 TextColumn::make('quantity')
+                ->label('Cantidad')
                 ->sortable()
                 ->toggleable(),
 
                 TextColumn::make('published_at')
+                ->label('Fecha Publicación')
                 ->date()
                 ->sortable(),
 
-                TextColumn::make('type'),
+                TextColumn::make('type')->label('Tipo'),
             ])
             ->filters([
                 TernaryFilter::make('is_visible')

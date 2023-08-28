@@ -29,11 +29,10 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors([
                 // 'primary' => Color::Teal,
-                // 'primary' => '#1D70B7', # Color oficial Mincyt
-                'primary' => Color::Gray,
-            ])
+                'primary' => '#C61313',
+           ])
             ->font('Raleway')
-            ->favicon('images/favicon_mincyt_Nb.png')
+            ->favicon('images/favicon.png')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

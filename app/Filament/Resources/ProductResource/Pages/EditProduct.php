@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
+    protected ?string $heading = 'Editar Producto';
 
     protected function getHeaderActions(): array
     {

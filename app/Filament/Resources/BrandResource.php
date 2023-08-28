@@ -117,6 +117,7 @@ class BrandResource extends Resource
                 ->label('Visibilidad'),
 
                 TextColumn::make('updated_at')
+                ->label('Modificado')
                 ->date()
                 ->sortable()
             ])

@@ -10,6 +10,8 @@ class ListBrands extends ListRecords
 {
     protected static string $resource = BrandResource::class;
 
+    protected ?string $heading = 'Marcas';
+
     protected function getHeaderActions(): array
     {
         return [

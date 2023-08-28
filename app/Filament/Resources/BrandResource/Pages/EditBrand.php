@@ -9,6 +9,7 @@ use Filament\Resources\Pages\EditRecord;
 class EditBrand extends EditRecord
 {
     protected static string $resource = BrandResource::class;
+    protected ?string $heading = 'Editar Marca';
 
     protected function getHeaderActions(): array
     {
