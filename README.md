@@ -10,15 +10,15 @@
 ## Sobre PHPSTOCK-FILAMENT
 
 Manejador de inventario de activos digitales - Gestión Básica de Información de Servicios Digitales
-<span>![</span><span>Sistema Seguro, con gestión de Usuarios, Roles y Permisos.</span><span>]</span><span>(</span><span>https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/login.png</span><span>)</span>
+![Sistema Seguro, con gestión de Usuarios, Roles y Permisos.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/login.png)
 
 ### Selector de Color
-<span>![</span><span>Funciones avanzadas como edición de imágenes y selector de colores.</span><span>]</span><span>(</span><span>https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/selector_color.png</span><span>)</span>
+![Funciones avanzadas como edición de imágenes y selector de colores.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/selector_color.png)
 
 ### Edición de Información de Productos
-<span>![</span><span>Edición de Productos, ampliable a gustos de solicitantes.</span><span>]</span><span>(</span><span>https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/edicion_marca.png</span><span>)</span>
+![Edición de Productos, ampliable a gustos de solicitantes.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/edicion_marca.png)
 
 ### Gestión avanzada de listados
-<span>![</span><span>Listado avanzado de Productos, Filtrado, Importación y Exportación de Productos por Lote.</span><span>]</span><span>(</span><span>https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/marcas.png</span><span>)</span>
+![Listado avanzado de Productos, Filtrado, Importación y Exportación de Productos por Lote.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/marcas.png)
 
 ## Mucho más!
