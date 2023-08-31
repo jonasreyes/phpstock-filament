@@ -83,7 +83,7 @@ class CategoryResource extends Resource
                         Select::make('parent_id')
                         ->label('Parent')
                         // Se comenta porque aún no está creado este modelo "parent"
-                        // ->relationship('parent', 'parent_id')
+                        ->relationship('parent', 'name')
                     ])
                 ])
             ]);
