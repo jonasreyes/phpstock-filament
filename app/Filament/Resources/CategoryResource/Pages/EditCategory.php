@@ -10,6 +10,8 @@ class EditCategory extends EditRecord
 {
     protected static string $resource = CategoryResource::class;
 
+    protected ?string $heading = 'Editar Categoría';
+
     protected function getHeaderActions(): array
     {
         return [

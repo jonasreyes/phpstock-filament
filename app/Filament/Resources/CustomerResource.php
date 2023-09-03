@@ -26,11 +26,14 @@ class CustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-user-group';
+
     protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationGroup = 'Comercio';
 
     protected static ?string $navigationLabel = 'Clientes';
+
 
     public static function form(Form $form): Form
     {
@@ -118,7 +121,7 @@ class CustomerResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->label('Crear cliente'),
             ]);
     }
 

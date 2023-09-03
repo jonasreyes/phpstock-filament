@@ -37,6 +37,8 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-bolt';
+
     protected static ?int $navigationSort = 0;
 
     protected static ?string $navigationGroup = 'Comercio';
@@ -47,6 +49,11 @@ class ProductResource extends Resource
 
     protected static int $globalSearchResultsLimit = 20;
 
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function getGloballySearchableAttributes(): array
     {

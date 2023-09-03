@@ -33,6 +33,24 @@ class OrderResource extends Resource
 
     protected static ?string $navigationGroup = 'Comercio';
 
+    protected static ?string $navigationLabel = 'Ordenes';
+
+    protected static ?string $activeNavigationIcon = 'heroicon-s-shopping-bag';
+
+    protected static ?string $heading = 'Ordenes';
+
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', '=', 'processing')->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('status', '=', 'processing')->count() > 10
+            ? 'warning'
+            : 'primary';
+    }
 
     public static function form(Form $form): Form
     {
@@ -141,7 +159,7 @@ class OrderResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->label('Crear orden'),
             ]);
     }
 

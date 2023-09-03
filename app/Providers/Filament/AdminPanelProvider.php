@@ -5,6 +5,8 @@ namespace App\Providers\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -32,6 +34,20 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#C61313',
             ])
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->sidebarCollapsibleOnDesktop(true)
+            ->navigationItems([
+                NavigationItem::make('Blog')
+                ->url('https://codevip.dev', shouldOpenInNewTab:true)
+                ->icon('heroicon-o-pencil-square')
+                ->group('Enlaces')
+                ->sort(2)
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                ->label('Configuración')
+                ->url('')
+                ->icon('heroicon-o-cog-6-tooth')
+            ])
             ->font('Raleway')
             ->favicon('images/favicon.png')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

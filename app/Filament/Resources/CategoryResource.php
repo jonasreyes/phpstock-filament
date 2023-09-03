@@ -31,11 +31,15 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-tag';
+
     protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationLabel = 'Categorias';
 
     protected static ?string $navigationGroup = 'Comercio';
+
+    // protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Form $form): Form
     {
@@ -81,7 +85,7 @@ class CategoryResource extends Resource
                         ->default(true),
 
                         Select::make('parent_id')
-                        ->label('Parent')
+                        ->label('Padre')
                         // Se comenta porque aún no está creado este modelo "parent"
                         ->relationship('parent', 'name')
                     ])
@@ -99,7 +103,7 @@ class CategoryResource extends Resource
                 ->searchable(),
 
                 TextColumn::make('parent.name')
-                ->label('Parent')
+                ->label('Padre')
                 ->searchable()
                 ->sortable(),
 

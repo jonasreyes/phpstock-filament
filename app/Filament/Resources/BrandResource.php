@@ -31,6 +31,8 @@ class BrandResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $activeNavigationIcon = 'heroicon-s-rectangle-stack';
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationGroup = 'Comercio';
@@ -100,6 +102,7 @@ class BrandResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                ->label('Nombre')
                 ->searchable()
                 ->sortable(),
 
@@ -137,7 +140,7 @@ class BrandResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()->label('Crear Marca'),
             ]);
     }
 
