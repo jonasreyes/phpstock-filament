@@ -1,89 +1,41 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\BrandResource\RelationManagers;
 
 use App\Enums\ProductTypeEnum;
-use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 
-class ProductResource extends Resource
+class ProductsRelationManager extends RelationManager
 {
-    protected static ?string $model = Product::class;
+    protected static string $relationship = 'products';
 
-    protected static ?string $navigationIcon = 'heroicon-o-bolt';
-
-    protected static ?string $activeNavigationIcon = 'heroicon-s-bolt';
-
-    protected static ?int $navigationSort = 0;
-
-    protected static ?string $navigationGroup = 'Comercio';
-
-    protected static ?string $navigationLabel = 'Productos';
-
-    protected static ?string $recordTitleAttribute = 'name';
-
-    protected static int $globalSearchResultsLimit = 20;
-
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['name', 'slug', 'description'];
-    }
-
-
-    public static function getGlobalSearchResultDetails(Model $record): array
-    {
-        return [
-            'Marca' => $record->brand->name,
-            'Descripción' => $record->description
-        ];
-    }
-
-    public static function getGlobalSearchEloquentQuery(): Builder
-    {
-        return parent::getGlobalSearchEloquentQuery()->with(['brand']);
-    }
-
-
-
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Group::make()
-                ->schema([
-                    Section::make()
+                Forms\Components\Tabs::make('Productos')
+                ->tabs([
+                    Forms\Components\Tabs\Tab::make('Información')
                     ->schema([
+
                         TextInput::make('name')
                         ->label('Nombre')
                         ->required()
@@ -105,9 +57,9 @@ class ProductResource extends Resource
 
                         MarkdownEditor::make('description')->columnSpan('full')
                         ->label('Descripción'),
-                    ])->columns(2),
+                    ])->columns(),
 
-                    Section::make('Precio & Inventario')
+                    Forms\Components\Tabs\Tab::make('Precio & Inventario')
                     ->schema([
                         TextInput::make('sku')
                         ->label("SKU (Unidad Mant. Stock)"),
@@ -131,12 +83,9 @@ class ProductResource extends Resource
                             'downloadable' => ProductTypeEnum::DOWNLOADABLE->value,
                             'deliverable' => ProductTypeEnum::DELIVERABLE->value,
                         ])->required()
-                    ])->columns(2)
-                ]),
+                    ])->columns(2),
+                    Forms\Components\Tabs\Tab::make('Información Adicional')
 
-                Group::make()
-                ->schema([
-                    Section::make('Status')
                     ->schema([
                         Toggle::make('is_visible')
                         ->label('Visibilidad')
@@ -149,39 +98,32 @@ class ProductResource extends Resource
 
                         DatePicker::make('published_at')
                         ->label('Disponibilidad')
-                        ->default(now())
-                        ->columnSpan('full')
-                    ]),
-
-                    Section::make('Imagen')
-                    ->schema([
-                        FileUpload::make('image')
-                        ->directory('form-attachments')
-                        ->preserveFilenames()
-                        ->image()
-                        ->imageEditor()
-                    ])->collapsible(),
-
-                    Section::make('Asociaciones')
-                    ->schema([
-                        Select::make('brand_id')
-                        ->relationship('brand', 'name'),
-
+                        ->default(now()),
+                        // ->columnSpan('full'),
 
                         Select::make('categories')
                             ->relationship('categories', 'name')
                             ->multiple()
                             ->required(),
-                    ])
-                ]),
 
+
+                        FileUpload::make('image')
+                        ->directory('form-attachments')
+                        ->preserveFilenames()
+                        ->image()
+                        ->imageEditor()
+                        ->columnSpanFull()
+                    ])->columns(2)
+                ])->columnSpanFull()
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('name')
             ->columns([
+
                 ImageColumn::make('image')
                 ->label('Imagen'),
 
@@ -219,19 +161,14 @@ class ProductResource extends Resource
                 TextColumn::make('type')->label('Tipo'),
             ])
             ->filters([
-                TernaryFilter::make('is_visible')
-                ->label('Visibilidad')
-                ->boolean()
-                ->trueLabel('Solo Productos Visibles')
-                ->falseLabel('Solo Productos Ocultos')
-                ->native(false),
-
-                SelectFilter::make('brand')
-                ->relationship('brand', 'name')
+                //
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make(),
+                    Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make()
                 ])
@@ -244,21 +181,5 @@ class ProductResource extends Resource
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
-        ];
     }
 }

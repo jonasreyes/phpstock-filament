@@ -6,6 +6,7 @@ use App\Enums\OrderStatusEnum;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
+use App\Models\Customer;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\MarkdownEditor;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -66,20 +68,26 @@ class OrderResource extends Resource
                         ->dehydrated()
                         ->required(),
 
-                        Select::make('costumer_id')
+                        Select::make('customer_id')
                         ->label('Cliente')
                         ->relationship('customer', 'name')
                         ->searchable()
+                        ->required(),
+
+                        TextInput::make('shipping_price')
+                        ->label('Costos de envío')
+                        ->dehydrated()
+                        ->numeric()
                         ->required(),
 
                         Select::make('type')
                         ->label('Tipo')
                         ->options([
                             'pending' => OrderStatusEnum::PENDING->value,
-                            'processig' => OrderStatusEnum::DECLINED->value,
+                            'processig' => OrderStatusEnum::PROCESSING->value,
                             'completed' => OrderStatusEnum::COMPLETED->value,
                             'declined' => OrderStatusEnum::DECLINED->value,
-                        ])->columnSpanFull(),
+                        ])->required(),
 
                         MarkdownEditor::make('notes')
                         ->label('Notas')
@@ -94,11 +102,17 @@ class OrderResource extends Resource
 
                             Select::make('product_id')
                             ->label('Producto')
-                            ->options(Product::query()->pluck('name', 'id')),
+                            ->options(Product::query()->pluck('name', 'id'))
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(fn($state, Forms\Set $set) =>
+                            $set('unit_price', Product::find($state)?->price ?? 0)),
 
                             TextInput::make('quantity')
                             ->label('Cantidad')
                             ->numeric()
+                            ->live()
+                            ->dehydrated()
                             ->default(1)
                             ->required(),
 
@@ -108,7 +122,13 @@ class OrderResource extends Resource
                             ->dehydrated()
                             ->numeric()
                             ->required(),
-                        ])->columns(3)
+
+                            Forms\Components\Placeholder::make('total_price')
+                            ->label('Precio Total')
+                            ->content(function($get){
+                                return $get('quantity') * $get('unit_price');
+                            })
+                        ])->columns(4)
                     ])
                 ])->columnSpanFull()
             ]);
@@ -134,15 +154,6 @@ class OrderResource extends Resource
                 ->searchable()
                 ->sortable(),
 
-                TextColumn::make('total_price')
-                ->label('Precio Total')
-                ->searchable()
-                ->sortable()
-                ->summarize([
-                    Sum::make()
-                    ->money()
-                ]),
-
                 TextColumn::make('created_at')
                 ->label('Fecha de Orden')
                 ->date(),
@@ -151,7 +162,10 @@ class OrderResource extends Resource
                 //
             ])
             ->actions([
+                ActionGroup::make([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
