@@ -7,9 +7,10 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Sobre PHPSTOCK-FILAMENT
+# Sobre PHPSTOCK-FILAMENT
+## Sistema de Gestión del Stock de Servicios Digitales
+- Versión 0.02 (Alfa, aún no madura para la producción)
 
-Manejador de inventario de activos digitales - Gestión Básica de Información de Servicios Digitales
 ![Sistema Seguro, con gestión de Usuarios, Roles y Permisos.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/login.png)
 
 ### Selector de Color
@@ -21,4 +22,4 @@ Manejador de inventario de activos digitales - Gestión Básica de Información 
 ### Gestión avanzada de listados
 ![Listado avanzado de Productos, Filtrado, Importación y Exportación de Productos por Lote.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/marcas.png)
 
-## Mucho más!
+> #PatriaYSoftwareLibre!
