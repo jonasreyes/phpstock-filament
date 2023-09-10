@@ -80,8 +80,8 @@ class OrderResource extends Resource
                         ->numeric()
                         ->required(),
 
-                        Select::make('type')
-                        ->label('Tipo')
+                        Select::make('status')
+                        ->label('Estatus')
                         ->options([
                             'pending' => OrderStatusEnum::PENDING->value,
                             'processig' => OrderStatusEnum::PROCESSING->value,
