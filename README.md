@@ -22,4 +22,7 @@
 ### Gestión avanzada de listados
 ![Listado avanzado de Productos, Filtrado, Importación y Exportación de Productos por Lote.](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/marcas.png)
 
+### Generación de Gráficos y Estadísticas por modelos (se irán añádiendo más)
+![Widgets de Estadísticas y Gráficas de datos en bases de datos](https://raw.githubusercontent.com/jonasreyes/phpstock-filament/main/public/images/img_to_github/stats_charts.png)
+
 > #PatriaYSoftwareLibre!
