@@ -128,8 +128,8 @@ class ProductResource extends Resource
                         Select::make('type')
                         ->label('Tipo')
                         ->options([
-                            'downloadable' => ProductTypeEnum::DOWNLOADABLE->value,
-                            'deliverable' => ProductTypeEnum::DELIVERABLE->value,
+                            'descargable' => ProductTypeEnum::DESCARGABLE->value,
+                            'entregable' => ProductTypeEnum::ENTREGABLE->value,
                         ])->required()
                     ])->columns(2)
                 ]),
@@ -227,6 +227,7 @@ class ProductResource extends Resource
                 ->native(false),
 
                 SelectFilter::make('brand')
+                ->label('Marca')
                 ->relationship('brand', 'name')
             ])
             ->actions([

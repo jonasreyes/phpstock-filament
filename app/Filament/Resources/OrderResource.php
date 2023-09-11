@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -44,14 +45,14 @@ class OrderResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::where('status', '=', 'processing')->count();
+        return static::getModel()::where('status', '=', 'pendiente')->count();
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::where('status', '=', 'processing')->count() > 10
+        return static::getModel()::where('status', '=', 'pendiente')->count() > 0
             ? 'warning'
-            : 'primary';
+            : 'success';
     }
 
     public static function form(Form $form): Form
@@ -83,10 +84,10 @@ class OrderResource extends Resource
                         Select::make('status')
                         ->label('Estatus')
                         ->options([
-                            'pending' => OrderStatusEnum::PENDING->value,
-                            'processig' => OrderStatusEnum::PROCESSING->value,
-                            'completed' => OrderStatusEnum::COMPLETED->value,
-                            'declined' => OrderStatusEnum::DECLINED->value,
+                            'pendiente' => OrderStatusEnum::PENDIENTE->value,
+                            'procesando' => OrderStatusEnum::PROCESANDO->value,
+                            'completado' => OrderStatusEnum::COMPLETADO->value,
+                            'rechazado' => OrderStatusEnum::RECHAZADO->value,
                         ])->required(),
 
                         MarkdownEditor::make('notes')
@@ -159,7 +160,14 @@ class OrderResource extends Resource
                 ->date(),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                ->label('Estatus')
+                ->options([
+                            'pendiente' => OrderStatusEnum::PENDIENTE->value,
+                            'procesando' => OrderStatusEnum::PROCESANDO->value,
+                            'completado' => OrderStatusEnum::COMPLETADO->value,
+                            'rechazado' => OrderStatusEnum::RECHAZADO->value,
+                ])
             ])
             ->actions([
                 ActionGroup::make([

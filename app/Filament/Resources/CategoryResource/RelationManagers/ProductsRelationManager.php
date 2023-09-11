@@ -77,8 +77,8 @@ class ProductsRelationManager extends RelationManager
                         Select::make('type')
                         ->label('Tipo')
                         ->options([
-                            'downloadable' => ProductTypeEnum::DOWNLOADABLE->value,
-                            'deliverable' => ProductTypeEnum::DELIVERABLE->value,
+                            'descargable' => ProductTypeEnum::DESCARGABLE->value,
+                            'entregable' => ProductTypeEnum::ENTREGABLE->value,
                         ])->required()
                     ])->columns(2),
 
@@ -90,7 +90,7 @@ class ProductsRelationManager extends RelationManager
                         ->default(true),
 
                         Toggle::make('is_featured')
-                        ->label('Característica')
+                        ->label('Destacado')
                         ->helperText('Habilita o inhabilita el estado de productos destacados'),
 
                         DatePicker::make('published_at')

@@ -67,7 +67,8 @@ class CategoryResource extends Resource
                         ->disabled()
                         ->dehydrated()
                         ->required()
-                        ->unique(Product::class, 'slug', ignoreRecord: true),
+                        ->unique(Category::class, 'slug', ignoreRecord: true),
+                        // ->unique(Product::class, 'slug', ignoreRecord: true),
 
                         MarkdownEditor::make('description')
                         ->label('Descripción')

@@ -12,9 +12,9 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class StatsOverview extends BaseWidget
 {
     protected static ?int $sort = 2;
-    
+
     protected static ?string $pollingInterval = '15s';
-    
+
     protected static bool $isLazy = true;
 
     protected function getStats(): array
@@ -32,7 +32,7 @@ class StatsOverview extends BaseWidget
             ->color('danger')
             ->chart([2,7,3,5,8,9,10,13]),
 
-            Stat::make('Órdenes Pendientes', Order::where('status', OrderStatusEnum::PENDING->value)->count())
+            Stat::make('Órdenes Pendientes', Order::where('status', OrderStatusEnum::PENDIENTE->value)->count())
             ->description('Total de productos en la App')
             ->descriptionColor('heroicon-m-arrow-trending-down')
             ->color('danger')

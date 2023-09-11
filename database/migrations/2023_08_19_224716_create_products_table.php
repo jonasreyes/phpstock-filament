@@ -25,8 +25,8 @@ return new class extends Migration
                 $table->decimal('price', 10, 2);
                 $table->boolean('is_visible')->default(false);
                 $table->boolean('is_featured')->default(false);
-                $table->enum('type', ['deliverable', 'downloadable'])
-                ->default('deliverable');
+                $table->enum('type', ['entregable', 'descargable'])
+                ->default('entregable');
                 $table->date('published_at');
 
             $table->timestamps();
