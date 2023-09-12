@@ -25,6 +25,8 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class OrderResource extends Resource
 {
@@ -171,8 +173,9 @@ class OrderResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
+
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
                 ])
             ])
             ->bulkActions([
@@ -183,6 +186,7 @@ class OrderResource extends Resource
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make()->label('Crear orden'),
             ]);
+
     }
 
     public static function getRelations(): array
